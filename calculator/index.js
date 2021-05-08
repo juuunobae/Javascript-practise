@@ -1,10 +1,14 @@
+// 계산을 위한 값을 저장하기 위한 변수
 let numOne = "";
+// 연산자를 저장하기 위한 변수
 let operator = "";
+// 계산을 위한 값을 저장하기 위한 변수
 let numTwo = "";
 
 const $operator = document.querySelector("#operator");
 const $result = document.querySelector("#result");
 
+// 고차 함수 사용 예시
 // const onClickNumber = (number) => {
 //   return () => {
 //     if (operator) {
@@ -47,6 +51,8 @@ const $result = document.querySelector("#result");
 // document.querySelector("#num-8").addEventListener("click", onClickNumber("8"));
 // document.querySelector("#num-9").addEventListener("click", onClickNumber("9"));
 
+// ------------------------------------------------------------------------------------
+// 입력받은 연산자에 맞는 계산을 하기 위한 함수
 const getOperator = () => {
   switch (
     operator // operator 변수의 값에 따라 계산을 하게 하는 코드.
@@ -90,6 +96,7 @@ const onClickNumber = (event) => {
 const onClickOperator = (op) => () => {
   // 연속 계산을 하기 위한 코드
   if (numTwo) {
+    // 연산 함수 호출
     getOperator();
   }
   // 현재 계산 결과값을 numOne에 저장하기
@@ -129,6 +136,7 @@ document.querySelector("#calculate").addEventListener("click", () => {
   // numTwo에 값이 있을 때, 즉 numOne, operator, numTwo 모두에 값이 들어있을 때
   if (numTwo) {
     // 모든 변수에 값이 있고 계산이 가능한 상황
+    // 연산 함수 호출
     getOperator();
 
     // 다음 계산을 위해 계산을 마치면 화면에서 operator를 지워준다.
