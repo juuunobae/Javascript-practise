@@ -21,15 +21,17 @@ for (let n = 0; n <= 3; n += 1) {
   numbers.splice(index, 1);
 }
 
+console.log(answer);
+
 const tries = [];
 function checkInput(input) {
   if (input.length !== 4) {
     // 사용자에게 입력받은 숫자가 4개가 아닐 경우
     return alert("4자리 숫자를 입력해주세요");
   }
-  if (new set(input).size !== 4) {
+  if (new Set(input).size !== 4) {
     // 사용자에게 입력받은 4개의 숫자 중에 중복되는 숫자가 있을 경우
-    // new set(array)은 array에 중복된 값이 있으면 중복을 제거해주는 키워드이다.
+    // new Set(값)은 값에 중복된 요소가 있으면 중복을 제거해주는 키워드이다.
     // 중복이 있으면 제거한 후에 size(== length)가 4보다 짧으면 if문을 실행한다.
     return alert("중복되지 않게 입력해 주세요");
   }
@@ -42,42 +44,80 @@ function checkInput(input) {
   return true;
 }
 
+// 코드 중복을 줄이기 위해 패배했을 때 화면에 보여주는 코드를 함수로 만든다.
+function defeated() {
+  const message = document.createTextNode(`패배 정답은 ${answer.join("")}`);
+  $logs.appendChild(message);
+}
+
+let out = 0;
 $form.addEventListener("submit", (e) => {
   // form 이벤트가 발생했을 때의 기본동작을 취소해준다.
   e.preventDefault();
   // 변수에 사용자에게 입력받은 숫자를 담아준다.
-  const value = e.target[0].value;
+  const value = input.value;
   // 다음 입력을 할 때 편리를 위해 input창을 비워준다.
   $input.value = "";
 
   // 함수가 alert를 리턴하면 undefined가 되어 if 문에서는 false가 된다.
   if (!checkInput(value)) {
+    // 사용자가 입력한 값이 정상적이 아닐경우 함수를 빠져나간다.
     return;
   }
 
+  // 사용자가 입력한 값과 랜덤으로 뽑은 값이 같을 경우
   if (answer.join("") === value) {
+    // .join 메서드로 배열을 string으로 만들어준 다음 값을 비교한다.
     $logs.textContent = "홈런";
     return;
   }
 
-  if (tries.length >= 0) {
-    const message = document.createTextNode(`패배 정답은 ${answer.join("")}`);
-    $logs.appendChild(message);
+  // 사용자가 값을 입력한 횟수가 10번이 되었을 경우
+  if (tries.length >= 9) {
+    // 실패 메시지를 화면에 보여준다.
+    defeated();
     return;
   }
 
+  // 스트라이크 횟수를 저장하는 변수
   let strike = 0;
+  // 볼 횟수를 저장하는 변수
   let ball = 0;
+
+  // 랜덤값이 저장된 배열의 요소를 하나 씩 사용자가 입력한 값과 같은 수가 있는 지 확인
   for (let i = 0; i < answer.length; i++) {
+    // 랜덤값이 저장된 배열의 i번 째 요소가 사용자가 입력한 값에 있는 경우 그 값의 인덱스를, 없으면 -1을 index에 저장한다.
     const index = value.indexOf(answer[i]);
+    // 일치하는 수가 있을 경우
     if (index > -1) {
       if (index === i) {
-        strike += 1;
+        // 일치하는 수의 인덱스와 i번 째 자릿수와 같은 경우
+        strike += 1; // 스트라이크에 1을 더해준다.
       } else {
-        ball += 1;
+        // 일치하는 수가 있지만 i번 째 자릿수와 다른 경우
+        ball += 1; // 볼에 1을 더해준다.
       }
     }
   }
+
+  // 스트라이크, 볼 둘 다 아닐 경우 아웃
+  if (strike === 0 && ball === 0) {
+    out++;
+    $logs.append(`${value}: ${out} 아웃`, document.createElement("br"));
+  } else {
+    // 현재의 결과를 화면에 보여준다.
+    $logs.append(
+      `${value}: ${strike} 스트라이크 ${ball} 볼`,
+      document.createElement("br")
+    );
+  }
+
+  // 아웃이 세번되면 패배
+  if (out === 3) {
+    defeated();
+    return;
+  }
+  // 사용자가 입력한 값을 tries 배열에 저장한다.
 
   tries.push(value);
 });
