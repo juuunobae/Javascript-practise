@@ -14,19 +14,33 @@ const rspX = {
 $computer.style.background = `url(${IMG_URL}) 0 0`;
 $computer.style.backgroundSize = "auto 200px";
 
-let coord = 0;
-setInterval(() => {
-  if (coord === rspX.scissors) {
-    coord = rspX.rock;
-    $computer.style.background = `url(${IMG_URL}) ${rspX.rock} 0`;
-    $computer.style.backgroundSize = "auto 200px";
-  } else if (coord === rspX.rock) {
-    coord = rspX.paper;
-    $computer.style.background = `url(${IMG_URL}) ${rspX.paper} 0`;
-    $computer.style.backgroundSize = "auto 200px";
+let computerChoice = "scissors";
+const changeComputerHand = () => {
+  if (computerChoice === "scissors") {
+    computerChoice = "rock";
+  } else if (computerChoice === "rock") {
+    computerChoice = "paper";
   } else {
-    coord = rspX.scissors;
-    $computer.style.background = `url(${IMG_URL}) ${rspX.scissors} 0`;
-    $computer.style.backgroundSize = "auto 200px";
+    computerChoice = "scissors";
   }
-}, 50);
+  $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+  $computer.style.backgroundSize = "auto 200px";
+};
+
+let intervalId = setInterval(changeComputerHand, 50);
+
+const clickButton = () => {
+  clearInterval(intervalId);
+
+  setTimeout(() => {
+    clearInterval(intervalId);
+    $rock.removeEventListener("click", clickButton);
+    $scissors.removeEventListener("click", clickButton);
+    $paper.removeEventListener("click", clickButton);
+    intervalId = setInterval(changeComputerHand, 50);
+  }, 1000);
+};
+
+$rock.addEventListener("click", clickButton);
+$scissors.addEventListener("click", clickButton);
+$paper.addEventListener("click", clickButton);
