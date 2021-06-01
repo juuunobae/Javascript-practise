@@ -24,6 +24,10 @@ $screen.addEventListener("click", (e) => {
     records.push(current);
     const average = records.reduce((a, c) => a + c) / records.length;
     $result.textContent = `현재 ${current / 1000}s, 평균 ${average / 1000}s`;
+    const topFive = records.sort((p, c) => p - c).slice(0, 5);
+    topFive.forEach((top, i) => {
+      $result.append(document.createElement("br"), `${i + 1}위: ${top}ms`);
+    });
     startTime = null;
     endTime = null;
     $screen.classList.replace("now", "waiting");
