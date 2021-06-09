@@ -26,6 +26,7 @@ const monsterList = [
   { name: "슬라임", hp: 25, att: 10, xp: 10 },
   { name: "스켈레톤", hp: 50, att: 15, xp: 20 },
   { name: "마왕", hp: 150, att: 35, xp: 50 },
+  { name: "마왕", hp: 150, att: 35, xp: 50 },
 ];
 
 $startScreen.addEventListener("submit", (e) => {
